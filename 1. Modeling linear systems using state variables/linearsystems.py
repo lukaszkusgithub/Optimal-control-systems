@@ -37,7 +37,7 @@ def model(t, y):
 # Define a function named plot_response that takes in five arguments: the name of the plot (name),
 # the time vector (time_vec), the values to plot (value), an optional title for the plot (title),
 # and labels for the x-axis (x_label) and y-axis (y_label).
-def plot_response(name, time_vec, value, title=None, x_label='Time', y_label='Value'):
+def plot_response(name, time_vec, value, title=None, y_label='Value', x_label='Time'):
 
     # If no title is provided, set it to the name of the plot
     if title is None:
@@ -116,7 +116,7 @@ def example_1():
 
     return
 
-
+# RLC circuit
 def example_2():
     # Setting up the circuit parameters
     # resistance in ohms
@@ -203,11 +203,68 @@ def example_2():
 
     return 0
 
+# Planar manipulator with one degree of freedom.
+def example_3():
+    # coefficient of friction
+    d = 0.1
+    # mass
+    m = 1
+    # length
+    L = 0.5
+    # moment of inertia
+    J = (1/3) * m * L**2
+
+    # Define state space matrices
+    A_matrix = np.array([[0, 1], [0, (-d/J)]])
+    B_matrix = np.array([[0], [1/J]])
+    C_matrix = np.array([[1, 0]])
+    D_matrix = 0
+
+    # Create state space system
+    sys_ss = scipy.signal.StateSpace(A_matrix, B_matrix, C_matrix, D_matrix)
+
+    # Compute step response
+    step_response_sys_ss = scipy.signal.step(sys_ss)
+
+    if True:
+        plot_response('Manipulator', step_response_sys_ss[0], step_response_sys_ss[1], y_label='Gain')
+
+    # Define the time duration and time range
+    t_m = 10
+    t = np.linspace(0, t_m)
+
+    # Define the input signals
+    Tau_increment = np.linspace(0, 1)
+    Tau_decrement = 1 - np.linspace(0, 1)
+
+    # Obtain the system response for inputs
+    Tout_i, yout_i, xout_i = scipy.signal.lsim2(sys_ss, U=Tau_increment, T=t)
+    Tout_d, yout_d, xout_d = scipy.signal.lsim2(sys_ss, U=Tau_decrement, T=t)
+
+    if True:
+        plot_response('Linearly increasing signal', Tout_i, yout_i)
+    if True:
+        plot_response('Linearly increasing signal', Tout_d, yout_d)
+
+    # Obtain and plot the Bode plot of the system
+    w, mag, phase = scipy.signal.bode(sys_ss)
+    if True:
+        plt.figure('Bode')
+        plt.subplot(2, 1, 1, title="Bode Magnitude")
+        plt.semilogx(w, mag)
+        plt.grid()
+        plt.subplot(2, 1, 2, title="Bode Phase")
+        plt.semilogx(w, phase)
+        plt.grid()
+        plt.show()
+
+    return 0
+
 
 def main():
-    # example_1()
+    example_1()
     example_2()
-
+    example_3()
     return 0
 
 
