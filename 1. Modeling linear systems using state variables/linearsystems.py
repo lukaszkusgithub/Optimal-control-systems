@@ -56,9 +56,6 @@ def plot_response(name, time_vec, value, title=None, y_label='Value', x_label='T
 
 
 def example_1():
-
-    # Set the initial condition (y_0) for the system to 0.
-    y_0 = 0
     # Set the proportional gain (Kp_gain) to 3.
     Kp_gain = 3
     # Set the time constant (T) to 2.
@@ -115,6 +112,7 @@ def example_1():
         plot_response('Model Step response', y_response.t, y_response.y[0])
 
     return
+
 
 # RLC circuit
 def example_2():
@@ -202,6 +200,7 @@ def example_2():
         print(f'\n{sys_tf2ss}')
 
     return 0
+
 
 # Planar manipulator with one degree of freedom.
 def example_3():
