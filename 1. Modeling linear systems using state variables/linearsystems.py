@@ -8,6 +8,7 @@ import os
 if os.name == 'posix':
     matplotlib.use('macosx')
 
+
 # Define a function named model that takes in two arguments: time (t) and the state of the system (y).
 def model(t, y):
     # Set the proportional gain (Kp_gain) to 3.
@@ -89,7 +90,7 @@ def example_1():
     step_response_ss = scipy.signal.step(sys_ss)
 
     if True:
-        plot_response('StateSpace Step response', step_response_ss[0], step_response_ss[1])
+        plot_response('State Space model Step response', step_response_ss[0], step_response_ss[1])
 
     # Set the maximum time for the simulation (time_max) to 15.
     # Set the time step for the simulation (time_step) to 0.01.
@@ -113,11 +114,99 @@ def example_1():
     if True:
         plot_response('Model Step response', y_response.t, y_response.y[0])
 
+    return
+
+
+def example_2():
+    # Setting up the circuit parameters
+    # resistance in ohms
+    R = 12
+    # inductance in henries
+    L = 1
+    # capacitance in farads
+    C = 0.0001
+
+    # Creating the transfer function of the circuit
+    sys_tf = scipy.signal.TransferFunction(np.array([1, 0]), np.array([L, R, 1/C]))
+
+    # Computing the step response of the circuit using the transfer function
+    step_response_tf = scipy.signal.step(sys_tf)
+
+    # Computing the impulse response of the circuit using the transfer function
+    impulse_response_tf = scipy.signal.impulse(sys_tf)
+
+    if True:
+        plot_response('Transfer Function step response', step_response_tf[0], step_response_tf[1])
+    if True:
+        plot_response('Transfer Function impulse response', impulse_response_tf[0], impulse_response_tf[1])
+
+    # Define the state space matrices based on the given circuit parameters
+    A_matrix = np.array([[0, 1], [(-1/(L*C)), (-R/L)]])
+    B_matrix = np.array([[0], [1/L]])
+    C_matrix = np.array([[0, 1]])
+    D_matrix = 0
+
+    # Create a state space system using the matrices
+    sys_ss = scipy.signal.StateSpace(A_matrix, B_matrix, C_matrix, D_matrix)
+
+    # Obtain the step response of the state space system
+    step_response_ss = scipy.signal.step(sys_ss)
+
+    # Obtain the impulse response of the state space system
+    impulse_response_ss = scipy.signal.impulse(sys_ss)
+
+    if True:
+        plot_response('State space model step response', step_response_ss[0], step_response_ss[1])
+    if True:
+        plot_response('State space model impulse response', impulse_response_ss[0], impulse_response_ss[1])
+
+    # Convert state-space system to transfer function representation
+    sys_ss2tf = scipy.signal.ss2tf(A_matrix, B_matrix, C_matrix, D_matrix)
+
+    if True:
+        print("Transfer function")
+        print(sys_tf)
+        print("\nState-space system to transfer function")
+        print(sys_ss2tf)
+
+    # Convert the transfer function of a second-order RLC circuit into state-space representation
+    # The numerator polynomial is [1, 0], representing the transfer function 1/s
+    # The denominator polynomial is [L, R, 1/C], representing the second-order characteristic equation
+    sys_tf2ss = scipy.signal.tf2ss([1, 0], [L, R, 1/C])
+
+    if True:
+        print("\n\nState space model")
+        print(sys_ss)
+        print("\nTransfer function to State space model")
+        print(sys_tf2ss)
+
+    # inductance in henries
+    L = 0.15
+
+    sys_ss2tf = scipy.signal.ss2tf(A_matrix, B_matrix, C_matrix, D_matrix)
+
+    if True:
+        print("Transfer function")
+        print(sys_tf)
+        print("\nState-space system to transfer function")
+        print(sys_ss2tf)
+        print(f'\n{sys_ss2tf}')
+
+    sys_tf2ss = scipy.signal.tf2ss([1, 0], [L, R, 1 / C])
+
+    if True:
+        print("\n\nState space model")
+        print(sys_ss)
+        print("\nTransfer function to State space model")
+        print(sys_tf2ss)
+        print(f'\n{sys_tf2ss}')
+
     return 0
 
 
 def main():
-    example_1()
+    # example_1()
+    example_2()
 
     return 0
 
