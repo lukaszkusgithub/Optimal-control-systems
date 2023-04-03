@@ -231,10 +231,102 @@ def example_1():
 
     return 0
 
+def example_2():
+    # Define controllable system matrices
+    sys_1_controllable_matrix_a = np.array([[0, 1, 0], [0, 0, 1], [-1 / 6, -1, -11 / 6]])
+
+    sys_1_controllable_matrix_b = np.array([[0], [0], [1]])
+
+    # Create system using state-space representation
+    A_matrix = np.array([[-1, 0, 0], [0, -0.5, 0], [0, 0, -1/3]])
+    B_matrix = np.array([[1], [0.5], [1/3]])
+    D_matrix = 0
+    C_matrix = np.array([[1, 0, 0]])
+    sys_1_matrix_c_1_lti = scipy.signal.lti(A_matrix, B_matrix, C_matrix, D_matrix)
+    # Create controllable system using state-space representation
+    sys_1_matrix_c_1_lti_ctr = scipy.signal.lti(sys_1_controllable_matrix_a, sys_1_controllable_matrix_b, C_matrix,
+                                            D_matrix)
+
+    # Create system using state-space representation
+    C_matrix  = np.array([[0, 1, 0]])
+    sys_1_matrix_c_2_lti = scipy.signal.lti(A_matrix, B_matrix, C_matrix, D_matrix)
+    # Create controllable system using state-space representation
+    sys_1_matrix_c_2_lti_ctr = scipy.signal.lti(sys_1_controllable_matrix_a, sys_1_controllable_matrix_b, C_matrix,
+                                            D_matrix)
+
+    # Create system using state-space representation
+    C_matrix = np.array([[0, 0, 1]])
+    sys_1_matrix_c_3_lti = scipy.signal.lti(A_matrix, B_matrix, C_matrix, D_matrix)
+    # Create controllable system using state-space representation
+    sys_1_matrix_c_3_lti_ctr = scipy.signal.lti(sys_1_controllable_matrix_a, sys_1_controllable_matrix_b, C_matrix,
+                                            D_matrix)
+
+    # Define controllable system matrices
+    sys_2_controllable_matrix_a = np.array([[0, 1, 0], [0, 0, 1],
+                                          [-1, -5 / 2, -5 / 2]])
+
+    sys_2_controllable_matrix_b = np.array([[0], [0], [1]])
+
+    # Create system using state-space representation
+    A_matrix = np.array([[-2, 0, -2], [0, 0, 1], [0.5, -0.5, -0.5]])
+    B_matrix = np.array([[2], [0], [0]])
+    D_matrix = 0
+    C_matrix = np.array([[1, 0, 0]])
+    sys_2_matrix_c_1_lti = scipy.signal.lti(A_matrix, B_matrix, C_matrix, D_matrix)
+    # Create controllable system using state-space representation
+    sys_2_matrix_c_1_lti_ctr = scipy.signal.lti(sys_2_controllable_matrix_a, sys_2_controllable_matrix_b, C_matrix,
+                                            D_matrix)
+
+    # Create system using state-space representation
+    C_matrix = np.array([[0, 1, 0]])
+    sys_2_matrix_c_2_lti = scipy.signal.lti(A_matrix, B_matrix, C_matrix, D_matrix)
+    # Create controllable system using state-space representation
+    sys_2_matrix_c_2_lti_ctr = scipy.signal.lti(sys_2_controllable_matrix_a, sys_2_controllable_matrix_b, C_matrix,
+                                            D_matrix)
+
+    # Create system using state-space representation
+    C_matrix = np.array([[0, 0, 1]])
+    sys_2_matrix_c_3_lti = scipy.signal.lti(A_matrix, B_matrix, C_matrix, D_matrix)
+    # Create controllable system using state-space representation
+    sys_2_matrix_c_3_lti_ctr = scipy.signal.lti(sys_2_controllable_matrix_a, sys_2_controllable_matrix_b, C_matrix,
+                                            D_matrix)
+
+    time = np.linspace(0, 10, 1000)
+
+    sys_1_step_response_matrix_c_1 = scipy.signal.step(sys_1_matrix_c_1_lti, T=time)
+    sys_1_step_response_matrix_c_2 = scipy.signal.step(sys_1_matrix_c_2_lti, T=time)
+    sys_1_step_response_matrix_c_3 = scipy.signal.step(sys_1_matrix_c_3_lti, T=time)
+
+    sys_1_step_response_matrix_c_1_ctr = scipy.signal.step(sys_1_matrix_c_1_lti_ctr, T=time)
+    sys_1_step_response_matrix_c_2_ctr = scipy.signal.step(sys_1_matrix_c_2_lti_ctr, T=time)
+    sys_1_step_response_matrix_c_3_ctr = scipy.signal.step(sys_1_matrix_c_3_lti_ctr, T=time)
+
+    if True:
+        plot_response('State Space model 1 Step response C = [1, 0, 0]', sys_1_step_response_matrix_c_1[0],
+                      sys_1_step_response_matrix_c_1[1])
+    if True:
+        plot_response('State Space model 1 Step response C = [0, 1, 0]', sys_1_step_response_matrix_c_2[0],
+                      sys_1_step_response_matrix_c_2[1])
+    if True:
+        plot_response('State Space model 1 Step response C = [0, 0, 1]', sys_1_step_response_matrix_c_3[0],
+                      sys_1_step_response_matrix_c_3[1])
+
+    if True:
+        plot_response('State Space controllable model 1 Step response C = [1, 0, 0]', sys_1_step_response_matrix_c_1_ctr[0],
+                      sys_1_step_response_matrix_c_1_ctr[1])
+    if True:
+        plot_response('State Space controllable model 1 Step response C = [0, 1, 0]', sys_1_step_response_matrix_c_2_ctr[0],
+                      sys_1_step_response_matrix_c_2_ctr[1])
+    if True:
+        plot_response('State Space controllable model 1 Step response C = [0, 0, 1]', sys_1_step_response_matrix_c_3_ctr[0],
+                      sys_1_step_response_matrix_c_3_ctr[1])
+
+
+
 
 
 def main():
-    example_1()
+    # example_1()
     # example_2()
     # example_3()
     return 0
