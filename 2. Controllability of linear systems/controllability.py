@@ -322,13 +322,64 @@ def example_2():
                       sys_1_step_response_matrix_c_3_ctr[1])
 
 
+def example_3():
+    # Define system matrices
+    A_matrix = np.array([[0, 1, 0], [0, 0, 1], [-1 / 6, -1, -11 / 6]])
+    B_matrix = np.array([[0], [0], [1]])
+    C_matrix = np.array([0, 0, 1])
+    D_matrix = 0
 
+    # Characteristic equation of a closed-loop system with state feedback:
+    # 0 = s^3 + (11/6 + k_3) * s^2 + (1+k_2) * s + (1/6 + k_1)
+    # 0 = s^3 + 8s^2 + 17s + 10
+    # 0 = (s + 1)(s + 2)(s + 5)
+    # 8 = 11/6 + k_3 -> 37/7
+    # 17 = 1 + k_2 -> k_2 = 16
+    # 10 = 1/6 + k_1 -> k_1 = 59/6
+
+    # Solve for feedback gains
+    k_1 = 59 / 6
+    k_2 = 16
+    k_3 = 37 / 6
+
+    k_matrix = np.array([k_1, k_2, k_3])
+
+    # Create new system matrices with feedback gains
+    A_matrix_new = np.array([[0, 1, 0], [0, 0, 1], [-1/6 - k_1, -1 - k_2, -11/6 - k_3]])
+    B_matrix_new = np.array([[0], [0], [0]])
+    D_matrix = np.array([[0]])
+
+    # Define new output matrix
+    C_matrix = np.array([[1, 0, 0]])
+    # C_matrix = np.array([[0, 1, 0]])
+    # C_matrix = np.array([[0, 0, 1]])
+
+    sys_1 = scipy.signal.StateSpace(A_matrix_new, B_matrix_new, C_matrix, D_matrix)
+
+    # Define time vector and input signal (zero)
+    time_vec = np.linspace(0, 10, 1000)
+    signal = [0] * len(time_vec)
+
+    # Define initial conditions
+    x_0 = (1, 2, 5)
+
+    # Compute system response to input signal with initial conditions
+    sys_1_response = scipy.signal.lsim2(sys_1, X0=x_0, U=signal,
+                                                T=time_vec)
+
+    # Plot the system response
+    if True:
+        plot_response('"Zero input response" with non-zero initial conditions. Model 1, C = [0, 0, 1]',
+                      sys_1_response[0],
+                      sys_1_response[2])
+
+    return 0
 
 
 def main():
-    # example_1()
-    # example_2()
-    # example_3()
+    example_1()
+    example_2()
+    example_3()
     return 0
 
 
